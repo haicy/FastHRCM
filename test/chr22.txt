@@ -1,0 +1,3 @@
+hg13_chr22.fa
+hg17_chr22.fa
+hg18_chr22.fa
