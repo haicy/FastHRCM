@@ -29,7 +29,7 @@ java -jar -Xmx20g FastHRCM.jar {file_name.txt} {compress | decompress} [thread_n
 
 3. Example
 
-3.1 You can download the jar package and the test datasets at: https://github.com/haicy/FastHRCM/test
+3.1 You can download the executable jar package and the test datasets in the test directory.
 
 3.2 compress and decompress hg17_chr22.fa and hg18_chr22.fa, using hg13_chr22.fa as reference. The paths of reference file and to-be-compressed files are written in chr22.txt in turn.
     java -jar -Xmx20g FastHRCM.jar chr22.txt compress 6
