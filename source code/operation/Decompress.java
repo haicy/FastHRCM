@@ -163,7 +163,7 @@ public class Decompress {
         }
     }
 
-    //构建hash表
+    //construct hash table
     public static void kMerHashingConstruct() {
         refLoc = new int[MAX_CHA_NUM];
         refBucket = new int[hashTableLen];
