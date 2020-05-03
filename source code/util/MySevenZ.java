@@ -33,7 +33,7 @@ public class MySevenZ {
     public static void decompress(String orgPath, String desPath) {
         File orgFile = new File(orgPath);
         if (!orgFile.exists()) {
-            throw new MyException(orgFile.getPath() + "所指文件不存在");
+            throw new MyException(orgFile.getPath() + "does not exist.");
         }
 
         SevenZArchiveEntry entry;
