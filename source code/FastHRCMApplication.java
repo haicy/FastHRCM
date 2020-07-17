@@ -34,7 +34,7 @@ public class FastHRCMApplication {
             Long endDecompressTime = System.currentTimeMillis();
             System.out.println("Info: Decompression complete. Decompression time: " + (endDecompressTime - startDecompressTime) / 1000 + "s.");
         } else {
-            System.out.println("Error: Please specify the execution mode, 0 for compression and 1 for decompression");
+            System.out.println("Error: Please specify the execution mode, compress for compression and decompress for decompression");
         }
     }
 }
