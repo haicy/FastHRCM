@@ -1,4 +1,4 @@
-package cn.hpc.util;
+package util;
 
 public class MyException extends RuntimeException {
 

@@ -1,12 +1,12 @@
-package cn.hpc.util;
+package util;
 
-import cn.hpc.pojo.Sequence;
+import pojo.Sequence;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static cn.hpc.operation.Compress.*;
+import static operation.Compress.*;
 
 public class ExtractThread extends Thread {
     private int seqNum;
@@ -20,6 +20,7 @@ public class ExtractThread extends Thread {
     @Override
     public void run() {
         Sequence sequence = new Sequence();
+        System.out.println("Info: Compressing the sequence ID: "+ seqNum);
         targetSequenceExtraction(seqNum, sequence);
 
         if (sequence.getLowVecLen() > 0 && refLowVecLen > 0) {
