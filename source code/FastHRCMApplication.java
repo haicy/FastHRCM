@@ -1,7 +1,5 @@
-package cn.hpc;
-
-import cn.hpc.operation.Compress;
-import cn.hpc.operation.Decompress;
+import operation.Compress;
+import operation.Decompress;
 
 import java.io.File;
 
@@ -24,7 +22,7 @@ public class FastHRCMApplication {
             Compress.initial(pathFile);
             Long startCompressTime = System.currentTimeMillis();
             Compress.compress(pathFile.getAbsolutePath(), poolSize);
-            Compress.sevenZip(path);
+            Compress.bscCompress(path);
             Long endCompressTime = System.currentTimeMillis();
             System.out.println("Info: Compression complete. Compression time: " + (endCompressTime - startCompressTime) / 1000 + "s.");
         } else if (myArgs[1].equals("decompress")) {
