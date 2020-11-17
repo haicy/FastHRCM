@@ -1,11 +1,9 @@
-package cn.hpc.operation;
+package operation;
 
-import cn.hpc.pojo.MatchEntry;
-import cn.hpc.pojo.Sequence;
-import cn.hpc.util.ExtractThread;
-import cn.hpc.util.MyException;
-import cn.hpc.util.MySevenZ;
-import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
+import pojo.MatchEntry;
+import pojo.Sequence;
+import util.ExtractThread;
+import util.MyException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import java.util.concurrent.Executors;
 public class Compress {
     public static int MAX_SEQ_NUM = 2000;                   //maximum sequence number
     public static int MAX_CHA_NUM = 1 << 28;                //maximum length of a chromosome
-    public static int PERCENT = 10;                         //the percentage of compressed sequence number uses as reference
+    public static int PERCENT = 25;                         //the percentage of compressed sequence number uses as reference
     public static int kMerLen = 14;                         //the length of k-mer
     public static int kMer_bit_num = 2 * kMerLen;           //bit numbers of k-mer
     public static int hashTableLen = 1 << kMer_bit_num;     // length of hash table
@@ -47,6 +45,7 @@ public class Compress {
 
         seqNumber = readFile(pathFile);
         secSeqNum = (int) Math.ceil((double) (PERCENT * seqNumber) / 100);
+        System.out.println("Info: PERCENT is " + PERCENT + ", secSeqNum is " + secSeqNum);
         seqBucketLen = getNextPrime(VEC_SIZE);
 
         identifierVec = new String[seqNumber];
@@ -446,7 +445,7 @@ public class Compress {
         while (!executorServiceFirst.isTerminated()) {
 
         }
-//        System.out.println("The time that read and write secSeqNum gene files is: " + (System.currentTimeMillis() - startTime) + "ms\n");
+//        System.out.println("The time that read and write secSeqNum genome files is: " + (System.currentTimeMillis() - startTime) + "ms\n");
 
         ExecutorService executorServiceLater = Executors.newFixedThreadPool(poolSize);
         for (int i = secSeqNum + 1; i < seqNumber; i++) {
@@ -810,19 +809,32 @@ public class Compress {
         }
     }
 
-    public static void sevenZip(String path) {
+    /****************************
+    BSC compression for *.hrcm and *.desc
+    tar and compression command is：
+        tar -cf *.tar *.hrcm *.desc
+        ./bsc e *.tar *.bsc -e2
+    untar and decompression command is：
+        ./bsc d *.bsc
+        tar -xf *.tar
+     *****************************/
+    public static void bscCompress(String path) {
         try {
-            File tarFile = new File(path.replaceAll("txt", "7z"));
+            String fileName = path.replaceAll(".txt", "");
             File hrcmFile = new File(path.replaceAll("txt", "hrcm"));
             File descFile = new File(path.replaceAll("txt", "desc"));
-            SevenZOutputFile sevenZOutput = new SevenZOutputFile(tarFile);
-            File[] files = new File[]{hrcmFile, descFile};
-            MySevenZ.compress(sevenZOutput, files);
-            sevenZOutput.close();
+            File tarFile = new File(path.replaceAll("txt", "tar"));
+            String tarCommand = "tar -cf " + fileName + ".tar "+ fileName + ".hrcm " + fileName + ".desc";
+            Process p1 = Runtime.getRuntime().exec(tarCommand);
+            p1.waitFor();
+            String bscCommand = "./bsc e " + fileName + ".tar " + fileName + ".bsc -e2";
+            Process p2 = Runtime.getRuntime().exec(bscCommand);
+            p2.waitFor();
 
             delFile(hrcmFile);
             delFile(descFile);
-        } catch (IOException e) {
+            delFile(tarFile);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

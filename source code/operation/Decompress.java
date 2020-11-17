@@ -1,9 +1,8 @@
-package cn.hpc.operation;
+package operation;
 
-import cn.hpc.pojo.MatchEntry;
-import cn.hpc.pojo.Sequence;
-import cn.hpc.util.MyException;
-import cn.hpc.util.MySevenZ;
+import pojo.MatchEntry;
+import pojo.Sequence;
+import util.MyException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class Decompress {
             resultDirPath += info[i];
             resultDirPath += "/";
         }
-        resultDirPath += "result";
+        resultDirPath += "decompressed";
         resultDirPath += "/";
 
         return resultDirPath;
@@ -521,9 +520,33 @@ public class Decompress {
         }
     }
 
+    /****************************
+     untar and decompression
+     the command is：
+     ./bsc d *.bsc
+     tar -xf *.tar
+     *****************************/
+    public static void bscDecompress(String path) {
+        try {
+            String fileName = path.replaceAll(".txt", "");
+            String bscCommand = "./bsc d " + fileName + ".bsc " + fileName + ".tar";
+            Process p1 = Runtime.getRuntime().exec(bscCommand);
+            p1.waitFor();
+            String tarCommand = "tar -xf " + fileName + ".tar";
+            Process p2 = Runtime.getRuntime().exec(tarCommand);
+            p2.waitFor();
+            String delCommand = "rm -f " + fileName + ".tar";
+            Process p3 = Runtime.getRuntime().exec(delCommand);
+            p3.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void decompress(String filePath) {
         if (seqNumber > 1) {
-            MySevenZ.decompress(filePath.replaceAll("txt", "7z"), new File(filePath).getParent());
+            bscDecompress(filePath);
             String hrcmPath = filePath.replaceAll("txt", "") + "hrcm";    //stored the base of genomes
             String descPath = filePath.replaceAll("txt", "") + "desc";    //stored the lineWidth and identifier
             File hrcmFile = new File(hrcmPath);
