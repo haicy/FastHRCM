@@ -1,4 +1,4 @@
-package cn.hpc.pojo;
+package pojo;
 
 public class MatchEntry {
     private int pos;
